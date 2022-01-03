@@ -10,4 +10,69 @@
         This web application will provide users with information on movies, directors, and genres. 
         Users will be able to sign up, update their personal information, and create a list of their favorite movies.
     </p>
+    <table>
+        <tr>
+            <th>Request</th>
+            <th>URL</th>
+            <th>HTTP Method</th>
+            <th>Response</th>
+        </tr>
+        <tr>
+            <td>Get a list of movies</td>
+            <td>/movies</td>
+            <td>GET</td>
+            <td>Returns JSON list of movies</td>
+        </tr>
+        <tr>
+            <td>Get data about a movie</td>
+            <td>/movies/:title</td>
+            <td>GET</td>
+            <td>Returns JSON data about a specific movie</td>
+        </tr>
+        <tr>
+            <td>Get data about a genre by name/title</td>
+            <td>/genres/:genre</td>
+            <td>GET</td>
+            <td>Returns JSON data with movies of a specific genre</td>
+        </tr>
+        <tr>
+            <td>Get data about a director by name</td>
+            <td>/directors/:directorName</td>
+            <td>GET</td>
+            <td>Returns JSON data about the director</td>
+        </tr>
+        <tr>
+            <td>Allow new users</td>
+            <td>/users/:newUser</td>
+            <td>POST</td>
+            <td>Adds new user to JSON object</td>
+        </tr>
+        <tr>
+            <td>Allow users to update their user info</td>
+            <td>/users/:username</td>
+            <td>PUT</td>
+            <td>Returns the updated data fields</td>
+        </tr>
+        <tr>
+            <td>Allow users to add a movie to their list of favorites</td>
+            <td>/favorites/:movieName</td>
+            <td>POST</td>
+            <td>Returns text confirming a movie has been added successfully</td>
+        </tr>
+        <tr>
+            <td>Allow users to remove a movie from their list of favorites</td>
+            <td>/favorites/:deleteMovie</td>
+            <td>Delete</td>
+            <td>Returns text confirming a movie has been removed successfully</td>
+        </tr>
+        <tr>
+            <td>Allow existing users to deregister</td>
+            <td>/users/:deleteAccount</td>
+            <td>DELETE</td>
+            <td>Returns text confirming the user has been deregistered</td>
+        </tr>
+
+    </table>
+
 </body>
+</html>

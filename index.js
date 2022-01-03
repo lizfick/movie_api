@@ -3,62 +3,62 @@ const express = require('express');
 // declares a variable that encapsulates Express's functionality to configure your web server, variable used to route your HTTP requests and responses
 const app = express ();
 
-let topMovies = [
+let movies = [
     {
         title: 'The Lord of the Rings: The Fellowship of the Ring',
-        year: '2001',
+        director: 'Peter Jackson',
         genre: 'Fantasy Adventure'
     },
     {
         title: 'The Lord of the Rings: The Two Towers',
-        year: '2002',
+        director: 'Peter Jackson',
         genre: 'Fantasy Adventure'
     },
     {
         title: 'The Lord of the Rings: The Return of the King',
-        year: '2003',
+        director: 'Peter Jackson',
         genre: 'Fantasy Adventure'
     },
     {
         title: 'The Hobbit: An Unexpected Journey',
-        year: '2012',
+        director: 'Peter Jackson',
         genre: 'Fantasy Adventure'
     },
     {
         title: 'The Hobbit: The Desolation of Smaug',
-        year: '2013',
+        director: 'Peter Jackson',
         genre: 'Fantasy Adventure'
     },
     {
         title: 'The Hobbit: The Battle of the Five Armies',
-        year: '2014',
+        director: 'Peter Jackson',
         genre: 'Fantasy Adventure'
     },
     {
         title: 'Harry Potter and the Sorcerers Stone',
-        year: '2001',
+        director: 'Chris Columbus',
         genre: 'Fantasy Adventure'
     },
     {
         title: 'Harry Potter and the Chamber of Secrets',
-        year: '2002',
+        director: 'Chris Columbus',
         genre: 'Fantasy Adventure'
     },
     {
         title: 'Harry Potter and the Prisoner of Azkaban',
-        year: '2004',
+        director: 'Alfonso Cuaron',
         genre: 'Fantasy Adventure'
     },
     {
         title: 'Harry Potter and the Goblet of Fire',
-        year: '2005',
+        director: 'Mike Newell',
         genre: 'Fantasy Adventure'
     }
 ];
 
 // GET requests of all movies
-app.get('/', (req, res) => {
-    res.send('Welcome to myFlix!');
+app.get('/movies', (req, res) => {
+    res.json(movies);
 });
 
 app.get('/documentation', (req, res) => {
@@ -66,7 +66,7 @@ app.get('/documentation', (req, res) => {
 });
 
 app.get('/movies', (req, res) => {
-    res.json(topMovies);
+    res.json(movies);
 });
 
 app.use(express.static('public'));
@@ -80,11 +80,39 @@ let myLogger = (req, res, next) => {
 app.use(myLogger);
 
 app.get('/', (req, res) => {
-    res.send('Welcome to my app!');
+    res.send('Welcome to my myFlix!');
 });
 
-app.get('/secreturl', (req, res) => {
-    res.send('This is a secret url with super top-secret content.');
+app.get('/movies/:title', (req, res) => {
+    res.json(movies.find((movie) => movie.title === req.params.title));
+});
+
+app.get('/genres/:genre', (req, res) => {
+    res.json(movies.filter((movie) => movie.genre === req.params.genre));
+});
+
+app.get('/directors/:name', (req, res) => {
+    res.json(movies.filter((movie) => movie.director === req.params.name));
+});
+
+app.post('/users', (req, res) => {
+    res.send('Registration complete');
+});
+
+app.put('/users/:username', (req, res) => {
+    res.send('Information updated');
+});
+
+app.post('/users/:username/movies/:movieID', (req, res) => {
+    res.send('Movie added to favorites');
+});
+
+app.delete('/users/:username/movies/:movieID', (req, res) => {
+    res.send('Movie removed from favorites');
+});
+
+app.delete('/users/:username', (req, res) => {
+    res.send('Your account has been deleted');
 });
 
 // error-handler - middleware function that will log all application-level errors to the terminal
