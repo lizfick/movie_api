@@ -71,13 +71,13 @@ app.get('/movies', (req, res) => {
 
 app.use(express.static('public'));
 
-// Morgan middleware library to console log the URL of every request that comes into server
-let myLogger = (req, res, next) => {
-    console.log(req.url);
-    next();
-};
+// Morgan middleware function to console log the URL of every request that comes into server
+const express = require('express'),
+    morgan = require('morgan');
 
-app.use(myLogger);
+const app = express();
+
+app.use(morgan('common'));
 
 app.get('/', (req, res) => {
     res.send('Welcome to my myFlix!');
