@@ -1,7 +1,11 @@
 // imports express module locally so it can be used within file
-const express = require('express');
+const express = require('express'),
+// Morgan middleware function to console log the URL of every request that comes into server
+    morgan = require('morgan');
 // declares a variable that encapsulates Express's functionality to configure your web server, variable used to route your HTTP requests and responses
 const app = express ();
+
+app.use(morgan('common'));
 
 let movies = [
     {
@@ -61,27 +65,12 @@ app.get('/movies', (req, res) => {
     res.json(movies);
 });
 
-app.get('/documentation', (req, res) => {
-    res.sendFile('public/documentation.html', { root: __dirname });
-});
-
-app.get('/movies', (req, res) => {
-    res.json(movies);
-});
-
-app.use(express.static('public'));
-
-// Morgan middleware function to console log the URL of every request that comes into server
-const express = require('express'),
-    morgan = require('morgan');
-
-const app = express();
-
-app.use(morgan('common'));
-
 app.get('/', (req, res) => {
     res.send('Welcome to my myFlix!');
 });
+
+// serves documentation file from public folder
+app.use(express.static('public'));
 
 app.get('/movies/:title', (req, res) => {
     res.json(movies.find((movie) => movie.title === req.params.title));
