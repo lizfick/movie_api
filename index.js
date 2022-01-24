@@ -250,19 +250,21 @@ app.delete('/users/:Username', (req, res) => {
 });
 
 // delete movie from list of user's favorites
-app.delete('/users/:Username/FavoriteMovies/:MovieID', (req, res) => {
-    Users.findOneAndRemove({ Username: req.params.Username }, {
-        $pull: {FavoriteMovies: req.params.MovieID}
+app.delete('/users/:Username/movies/:title', (req, res) => {
+    Users.findOneAndUpdate({ Username: req.params.Username }, {
+        $pull: {FavoriteMovies: req.params.title}
     },
-    { new: true }, // makes sure updated document is returned
-    (err, updatedUser) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send('Error' + err);
+    { new: true }, 
+    ).then((updatedUser) => {
+        // makes sure updated document is returned
+        if (updatedUser === null) {
+            res.status(404).send("No user found")
         } else {
             res.json(updatedUser);
-        }
-    });
+        }}).catch((err) => {
+            console.error(err);
+            res.status(500).send('Error' + err);
+        })
 });
 
 // serves documentation file from public folder
