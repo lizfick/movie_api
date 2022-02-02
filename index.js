@@ -20,11 +20,18 @@ const { cloneDeep } = require('lodash');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
 
+const cors = require('cors');
+app.use(cors());
+
 // imports auth.js
 let auth = require('./auth')(app);
 // requires Passport module and imports passport.js
 const passport = require('passport');
 require('./passport');
+
+const { check, validationResult } = require('express-validator');
+// includes validator as middleware to the routes that require validation
+check([field in req.body to validate], [error message if validation fails]).[validation method]();
 
 let movies = [
     {
@@ -142,10 +149,31 @@ app.get('/directors/:directorName', passport.authenticate('jwt', { session: fals
   Email: String,
   Birthday: Date
 }*/
-app.post('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Users.findOne({ Username: req.body.Username })
+app.post('/users', passport.authenticate('jwt', { session: false }),
+  // Validation logic here for request
+  // you can either use a chain of methods like .not().isEmpty()
+  // which means "opposite of isEmpty" in plain english "is not empty"
+  // or use .isLength({min: 5}) which means
+  // minimum value of 5 characters are only allowed
+  [
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail()
+  ], (req, res) => {
+
+  // check the validation object for errors
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    Users.findOne({ Username: req.body.Username }) // search to see if user with requested username already exists
     .then((user) => {
         if (user) {
+            // is user is found, send a response that it already exists
             return res.status(400).send(req.body.Username + 'already exists');
         } else {
           Users
@@ -282,7 +310,8 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 });
 
-// listener for requests
-app.listen(8080, () => {
-    console.log('Your app is listening on port 8080.');
+// allos port to change if necessary
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
 });
