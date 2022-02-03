@@ -30,8 +30,6 @@ const passport = require('passport');
 require('./passport');
 
 const { check, validationResult } = require('express-validator');
-// includes validator as middleware to the routes that require validation
-check([field in req.body to validate], [error message if validation fails]).[validation method]();
 
 let movies = [
     {
