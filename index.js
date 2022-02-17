@@ -91,15 +91,13 @@ app.get('/', (req, res) => {
 
 // get all movies
 // passport.authenticate('jwt', { session: false }),
-app.get('/movies', function (req, res) => {
-    Movies.find()
-        .then((movies) => {
-            res.status(201).json(movies);
-        })
-        .catch((err) => {
-            console.error(err);
-            res.status(500).send('Error: ' + err);
-        });
+app.get('/movies', (req, res) => {
+    Movies.find().then((movies) => {
+        res.status(201).json(movies);
+    }).catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+    });
 });
 
 // get movie data by title
